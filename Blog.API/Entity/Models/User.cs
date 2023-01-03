@@ -2,7 +2,7 @@
 
 namespace Blog.API.Entity.Models
 {
-    public class User : IRequest<List<User>>
+    public class User : IRequest<BaseResult>
     {
         public int Id { get; set; }
         public string Username { get; set; }

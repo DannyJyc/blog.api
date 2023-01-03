@@ -1,8 +1,10 @@
 ﻿using Blog.API.Dynamic.Api.Core;
 using Blog.API.Dynamic.Api.Core.Attributes;
+using Blog.API.Entity;
 using Blog.API.Entity.Models;
 using Blog.API.Helper;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace Blog.API.Services
@@ -30,13 +32,29 @@ namespace Blog.API.Services
         {
             return $"ID：{id} 已删除";
         }
-
-        public string Get(int id)
+        /// <summary>
+        /// 登录
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public Task<BaseResult> Login(User user)
         {
-            return $"你输入的 ID 是：{id}";
-        }
+            if(!string.IsNullOrEmpty(user.Username)&&!string.IsNullOrEmpty(user.Password)) {
+                var result = _mediator.Send(user);
+                return result;
+            }
+            else
+            {
+                return Task.FromResult( new BaseResult { code = 201,message = "请输入用户名和密码"} );
+            }
 
-        public Task<List<User>>? GetAllUsers()
+        }
+        /// <summary>
+        /// 获取所有用户
+        /// </summary>
+        /// <returns></returns>
+        public Task<BaseResult> GetAllUsers()
         {
             var result = _mediator.Send(new User());
             return result;
