@@ -1,10 +1,7 @@
 
-using Blog.API.Dynamic.Api.Core;
 using Blog.API.Entity;
 using Blog.API.Helper;
-using Blog.API.JwtBearer.OptionsSetup;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -13,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // 调用扩展方法
-builder.Services.AddControllers().AddDynamicWebApi();
+builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 // Add Nuget MediatR.Extensions.Microsoft.DependencyInjection 拓展 IServiceCollection 
@@ -45,9 +42,8 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
-builder.Services.ConfigureOptions<JwtOptionsSetup>();
-builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
+builder.Services.AddAuthentication().AddJwtBearer();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
