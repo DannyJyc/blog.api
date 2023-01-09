@@ -4,8 +4,10 @@ using Blog.API.Entity;
 using Blog.API.Entity.Models;
 using Blog.API.Helper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using Blog.API.JwtBearer.Filter;
 
 namespace Blog.API.Services
 {
@@ -54,6 +56,7 @@ namespace Blog.API.Services
         /// 获取所有用户
         /// </summary>
         /// <returns></returns>
+        [JwtAuthorizeFilter]
         public Task<BaseResult> GetAllUsers()
         {
             var result = _mediator.Send(new User());
