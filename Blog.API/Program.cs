@@ -1,13 +1,19 @@
 
 using Blog.API.Entity;
 using Blog.API.Helper;
+using Blog.API.JwtBearer;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var key = "dannyjiang12345678";
 // Add services to the container.
 // 调用扩展方法
 builder.Services.AddControllers();
@@ -42,8 +48,23 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddAuthentication().AddJwtBearer();
-
+builder.Services.AddAuthentication(p =>
+{
+    p.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    p.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(p =>
+{
+    p.RequireHttpsMetadata = false;
+    p.SaveToken = true;
+    p.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+builder.Services.AddSingleton(new JwtProvider(key));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

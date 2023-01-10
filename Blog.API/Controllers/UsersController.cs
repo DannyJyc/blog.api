@@ -2,6 +2,7 @@
 using Blog.API.Entity;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Blog.API.Controllers
 {
@@ -54,6 +55,7 @@ namespace Blog.API.Controllers
         /// 获取所有用户
         /// </summary>
         /// <returns></returns>
+        [Authorize]
         [HttpGet("GetAllUsers")]
         public Task<BaseResult> GetAllUsers()
         {

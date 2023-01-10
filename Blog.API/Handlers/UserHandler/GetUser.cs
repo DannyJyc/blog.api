@@ -7,11 +7,12 @@ namespace Blog.API.Handlers.UserHandler
 {
     public class GetUser : IRequestHandler<User, BaseResult>
     {
-        private readonly JwtProvider jwtProvider = new ();
+        private readonly JwtProvider jwtProvider;
         private readonly EFCoreContext _context;
-        public GetUser(EFCoreContext context) //创造一个构造函数 当引用_context时就会引用这函数
+        public GetUser(EFCoreContext context, JwtProvider jwtprovider) //创造一个构造函数 当引用_context时就会引用这函数
         {
             _context = context;
+            jwtProvider = jwtprovider;
         }
         public Task<BaseResult> Handle(User request, CancellationToken cancellationToken)
         {
