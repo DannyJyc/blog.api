@@ -64,7 +64,7 @@ builder.Services.AddAuthentication(p =>
         ValidateAudience = false
     };
 });
-builder.Services.AddSingleton(new JwtProvider(key));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -79,6 +79,8 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseMiddleware<JwtMiddleware>();
 
 app.MapControllers();
 

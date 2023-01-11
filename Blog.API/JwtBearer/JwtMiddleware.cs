@@ -1,38 +1,35 @@
 ﻿using Blog.API.Entity.Models;
+using Blog.API.HandlerEntities.Users;
 using Blog.API.Helper;
-using Microsoft.IdentityModel.JsonWebTokens;
+using MediatR;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace Blog.API.JwtBearer
 {
-    public class JwtProvider
+    public class JwtMiddleware
     {
-        public string Generate(User user)
-        {
-            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            var tokenkey = Encoding.ASCII.GetBytes(GetTokenKeyHelper.GetTokenKey());
-            var token = handler.CreateToken(new SecurityTokenDescriptor()
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim("sub",user.Id.ToString()),
-                    new Claim("name",user.Username)
-                }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenkey),SecurityAlgorithms.HmacSha256Signature)
-            });
+        private readonly RequestDelegate _next;
 
-            return handler.WriteToken(token);
+        public JwtMiddleware(RequestDelegate next)
+        {
+            _next = next;
+        }
+        public async Task Invoke(HttpContext context)
+        {
+            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+
+            if (token != null)
+                attachUserToContext(context, token);
+
+            await _next(context);
         }
 
-        public int? Validate(string token)
+        private void attachUserToContext(HttpContext context, string token)
         {
             if (token == null)
-                return null;
+                context.Items["User"] = null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenkey = Encoding.ASCII.GetBytes(GetTokenKeyHelper.GetTokenKey());
@@ -49,12 +46,12 @@ namespace Blog.API.JwtBearer
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "sub").Value);
-
-                return userId;
+                //var result = _mediator.Send(new UserSingle { Id = userId});
+                //context.Items["User"] = result;
             }
             catch
             {
-                return null;
+                context.Items["User"] = null;
             }
         }
     }

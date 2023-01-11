@@ -2,7 +2,8 @@
 using Blog.API.Entity;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+using Blog.API.JwtBearer;
+using Blog.API.HandlerEntities.Users;
 
 namespace Blog.API.Controllers
 {
@@ -38,7 +39,7 @@ namespace Blog.API.Controllers
         /// <param name="user"></param>
         /// <returns></returns>
         [HttpPost("Login")]
-        public Task<BaseResult> Login(User user)
+        public Task<BaseResult> Login(UserList user)
         {
             if (!string.IsNullOrEmpty(user.Username) && !string.IsNullOrEmpty(user.Password))
             {
@@ -59,7 +60,7 @@ namespace Blog.API.Controllers
         [HttpGet("GetAllUsers")]
         public Task<BaseResult> GetAllUsers()
         {
-            var result = _mediator.Send(new User());
+            var result = _mediator.Send(new UserList());
             return result;
         }
         [HttpPost("Update")]

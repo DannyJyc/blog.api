@@ -2,10 +2,11 @@
 using Blog.API.Entity;
 using Blog.API.Entity.Models;
 using Blog.API.JwtBearer;
+using Blog.API.HandlerEntities.Users;
 
 namespace Blog.API.Handlers.UserHandler
 {
-    public class GetUser : IRequestHandler<User, BaseResult>
+    public class GetUser : IRequestHandler<UserList, BaseResult>
     {
         private readonly JwtProvider jwtProvider;
         private readonly EFCoreContext _context;
@@ -14,7 +15,7 @@ namespace Blog.API.Handlers.UserHandler
             _context = context;
             jwtProvider = jwtprovider;
         }
-        public Task<BaseResult> Handle(User request, CancellationToken cancellationToken)
+        public Task<BaseResult> Handle(UserList request, CancellationToken cancellationToken)
         {
             BaseResult baseResult = new();
             baseResult.code = 200;
