@@ -11,10 +11,11 @@ namespace Blog.API.JwtBearer
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
-
-        public JwtMiddleware(RequestDelegate next)
+        private readonly IMediator _mediator;
+        public JwtMiddleware(RequestDelegate next, IMediator mediator)
         {
             _next = next;
+            _mediator = mediator;
         }
         public async Task Invoke(HttpContext context)
         {
@@ -46,8 +47,8 @@ namespace Blog.API.JwtBearer
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "sub").Value);
-                //var result = _mediator.Send(new UserSingle { Id = userId});
-                //context.Items["User"] = result;
+                var result = _mediator.Send(new UserSingle { Id = userId });
+                context.Items["User"] = result;
             }
             catch
             {

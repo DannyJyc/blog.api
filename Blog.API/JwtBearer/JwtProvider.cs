@@ -28,34 +28,5 @@ namespace Blog.API.JwtBearer
 
             return handler.WriteToken(token);
         }
-
-        public int? Validate(string token)
-        {
-            if (token == null)
-                return null;
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenkey = Encoding.ASCII.GetBytes(GetTokenKeyHelper.GetTokenKey());
-            try
-            {
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(tokenkey),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
-
-                var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "sub").Value);
-
-                return userId;
-            }
-            catch
-            {
-                return null;
-            }
-        }
     }
 }
