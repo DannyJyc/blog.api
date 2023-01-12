@@ -3,6 +3,7 @@ using Blog.API.Entity;
 using Blog.API.HandlerEntities.Users;
 using Blog.API.JwtBearer;
 using MediatR;
+using Azure.Core;
 
 namespace Blog.API.Handlers.UserHandler
 {

@@ -1,4 +1,6 @@
-﻿using Blog.API.Entity.Models;
+﻿using Azure.Core;
+using Blog.API.Entity;
+using Blog.API.Entity.Models;
 using Blog.API.HandlerEntities.Users;
 using Blog.API.Helper;
 using MediatR;
@@ -11,11 +13,10 @@ namespace Blog.API.JwtBearer
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly IMediator _mediator;
-        public JwtMiddleware(RequestDelegate next, IMediator mediator)
+
+        public JwtMiddleware(RequestDelegate next)
         {
             _next = next;
-            _mediator = mediator;
         }
         public async Task Invoke(HttpContext context)
         {
@@ -30,7 +31,7 @@ namespace Blog.API.JwtBearer
         private void attachUserToContext(HttpContext context, string token)
         {
             if (token == null)
-                context.Items["User"] = null;
+                context.Items["userid"] = null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenkey = Encoding.ASCII.GetBytes(GetTokenKeyHelper.GetTokenKey());
@@ -47,12 +48,21 @@ namespace Blog.API.JwtBearer
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "sub").Value);
-                var result = _mediator.Send(new UserSingle { Id = userId });
-                context.Items["User"] = result;
+                
+                // 自定义中间件在加入管道时EFDBcontext上下文类并没有随着项目编译完成后注入进来所以在该中间件中无法使用
+                // 会引发错误：This using can throw InvalidOperationException
+                // Cannot resolve scoped service 'XXX.XXX.XXX.EFCoreContext' from root provider.
+                //var list = from users in _context.Users
+                //           where users.Id == userId
+                //           select users;
+                //if (list.Any())
+                //{
+                context.Items["userid"] = userId;
+                //}
             }
             catch
             {
-                context.Items["User"] = null;
+                context.Items["userid"] = null;
             }
         }
     }

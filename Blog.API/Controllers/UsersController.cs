@@ -56,8 +56,8 @@ namespace Blog.API.Controllers
         /// 获取所有用户
         /// </summary>
         /// <returns></returns>
-        [Authorize]
         [HttpGet("GetAllUsers")]
+        [Authorize]
         public Task<BaseResult> GetAllUsers()
         {
             var result = _mediator.Send(new UserList());
@@ -69,9 +69,10 @@ namespace Blog.API.Controllers
             return $" ID：{user.Id} 的名字改成了 {user.Username}";
         }
         [HttpGet("GetTest")]
-        public string GetTest(int id)
+        public Task<User> GetTest(int id)
         {
-            return $"TEST你输入的 ID 是：{id}";
+            var result = _mediator.Send(new UserSingle { Id = id });
+            return result;
         }
     }
 }
