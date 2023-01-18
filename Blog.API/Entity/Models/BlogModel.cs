@@ -12,5 +12,6 @@
         public DateTime Creatdate { get; set; }
         public DateTime Modifydate { get; set; }
         public int Uid { get; set; }
+        public List<int> Tagids { get; set; }
     }
 }

@@ -35,4 +35,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="HandlerEntities\Tags\" />
+    <Folder Include="Handlers\TagHandler\" />
+  </ItemGroup>
+
 </Project>
