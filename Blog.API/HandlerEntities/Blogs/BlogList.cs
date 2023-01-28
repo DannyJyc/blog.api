@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Blog.API.HandlerEntities.Blogs
 {
-    public class GetBlog : BlogModel, IRequest<BaseResult>
+    public class BlogList : BlogModel, IRequest<BaseResult>
     {
         /// <summary>
         /// 页码

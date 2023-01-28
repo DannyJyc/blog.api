@@ -6,14 +6,14 @@ using MediatR;
 
 namespace Blog.API.Handlers.BlogHandler
 {
-    public class GetBlogs : IRequestHandler<GetBlog, BaseResult>
+    public class GetBlogs : IRequestHandler<BlogList, BaseResult>
     {
         private readonly EFCoreContext _context;
         public GetBlogs(EFCoreContext context)
         {
             _context = context;
         }
-        public Task<BaseResult> Handle(GetBlog request, CancellationToken cancellationToken)
+        public Task<BaseResult> Handle(BlogList request, CancellationToken cancellationToken)
         {
             BaseResult baseResult = new();
             baseResult.code = 200;
@@ -22,7 +22,7 @@ namespace Blog.API.Handlers.BlogHandler
             {
                 var list = from blog in _context.Blogs
                            join bt in _context.Blog_Tags on blog.Id equals bt.Bid into Tags
-                           select new GetBlog
+                           select new BlogList
                            {
                                Id = blog.Id,
                                B_Title = blog.B_Title,

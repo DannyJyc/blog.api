@@ -24,7 +24,18 @@ namespace Blog.API.Controllers
         [HttpGet("getAll")]
         public Task<BaseResult> GetAll(int page, int pageSize)
         {
-            var result = _mediator.Send(new GetBlog() { page = page, pageSize = pageSize });
+            var result = _mediator.Send(new BlogList() { page = page, pageSize = pageSize });
+            return result;
+        }
+        /// <summary>
+        /// 查询一条博客的详细信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("getDetails/{id}")]
+        public Task<BaseResult> GetDetails(int id)
+        {
+            var result = _mediator.Send(new BlogSingle() { Id = id });
             return result;
         }
     }
