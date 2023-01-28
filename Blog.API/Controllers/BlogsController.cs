@@ -22,10 +22,10 @@ namespace Blog.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("getAll")]
-        public Task<BaseResult> GetAll()
+        public Task<BaseResult> GetAll(int page, int pageSize)
         {
-            var result = _mediator.Send(new GetBlog());
-            return result;  
+            var result = _mediator.Send(new GetBlog() { page = page, pageSize = pageSize });
+            return result;
         }
     }
 }

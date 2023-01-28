@@ -36,6 +36,11 @@ namespace Blog.API.Handlers.BlogHandler
                                Uid = blog.Uid,
                                Tagids = Tags.Any() ? Tags.Select(p => p.Tid).ToList() : new List<int>()
                            };
+                // 分页
+                if (request.page > 0 && request.pageSize > 0)
+                {
+                    list = list.Skip((request.page - 1) * request.pageSize).Take(request.pageSize);
+                }
                 baseResult.data = list;
                 return Task.FromResult(baseResult);
             }
