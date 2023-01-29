@@ -1,4 +1,5 @@
 ﻿using Blog.API.Entity;
+using Blog.API.Entity.Models;
 using Blog.API.HandlerEntities.Blogs;
 using Blog.API.HandlerEntities.Users;
 using Blog.API.JwtBearer;
@@ -39,6 +40,26 @@ namespace Blog.API.Handlers.BlogHandler
                                Tagids = Tags.Any() ? Tags.Select(p => p.Id).ToList() : new List<int>(),
                                TagNames = Tags.Any() ? Tags.Select(p => p.T_Name).ToList() : new List<string>()
                            };
+                list = from list1 in list
+                       group list1 by new
+                       {
+                           Id = list1.Id
+                       } into grouplist
+                       select new BlogList
+                       {
+                           Id = grouplist.Key.Id,
+                           B_Title = grouplist.Select(p => p.B_Title).FirstOrDefault(),
+                           B_Images = grouplist.Select(p => p.B_Title).FirstOrDefault(),
+                           B_Content = grouplist.Select(p => p.B_Title).FirstOrDefault(),
+                           B_Comment = grouplist.Select(p => p.B_Title).FirstOrDefault(),
+                           B_Watched = grouplist.Select(p => p.B_Watched).FirstOrDefault(),
+                           B_Replied = grouplist.Select(p => p.B_Replied).FirstOrDefault(),
+                           Creatdate = grouplist.Select(p => p.Creatdate).FirstOrDefault(),
+                           Modifydate = grouplist.Select(p => p.Modifydate).FirstOrDefault(),
+                           Uid = grouplist.Select(p => p.Uid).FirstOrDefault(),
+                           Tagids = grouplist.Any() ? grouplist.Select(p => p.Tagids.FirstOrDefault()).ToList() : new List<int>(),
+                           TagNames = grouplist.Any() ? grouplist.Select(p => p.TagNames.FirstOrDefault()).ToList() : new List<string>()
+                       };
                 // 分页
                 if (request.page > 0 && request.pageSize > 0)
                 {
