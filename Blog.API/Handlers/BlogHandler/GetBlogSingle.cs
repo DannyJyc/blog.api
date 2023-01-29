@@ -21,11 +21,27 @@ namespace Blog.API.Handlers.BlogHandler
             try
             {
                 var list = from blog in _context.Blogs
+                           join bt in _context.Blog_Tags on blog.Id equals bt.Bid
+                           join t in _context.Tags on bt.Tid equals t.Id into Tags
                            where blog.Id == request.Id
-                           select blog;
+                           select new BlogSingle
+                           {
+                               Id = blog.Id,
+                               B_Title = blog.B_Title,
+                               B_Images = blog.B_Images,
+                               B_Content = blog.B_Content,
+                               B_Comment = blog.B_Comment,
+                               B_Watched = blog.B_Watched,
+                               B_Replied = blog.B_Replied,
+                               Creatdate = blog.Creatdate,
+                               Modifydate = blog.Modifydate,
+                               Uid = blog.Uid,
+                               Tagids = Tags.Any() ? Tags.Select(p => p.Id).ToList() : new List<int>(),
+                               TagNames = Tags.Any() ? Tags.Select(p => p.T_Name).ToList() : new List<string>()
+                           };
                 if (list.Any())
                 {
-                    baseResult.data= list.FirstOrDefault();
+                    baseResult.data = list.FirstOrDefault();
                     return Task.FromResult(baseResult);
                 }
                 baseResult.code = 404;

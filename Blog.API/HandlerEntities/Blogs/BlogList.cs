@@ -14,5 +14,9 @@ namespace Blog.API.HandlerEntities.Blogs
         /// 页数据量
         /// </summary>
         public int pageSize { get; set; }
+        /// <summary>
+        /// 标签名字
+        /// </summary>
+        public List<string> TagNames { get; set; }
     }
 }

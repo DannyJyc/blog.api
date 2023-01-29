@@ -21,7 +21,8 @@ namespace Blog.API.Handlers.BlogHandler
             try
             {
                 var list = from blog in _context.Blogs
-                           join bt in _context.Blog_Tags on blog.Id equals bt.Bid into Tags
+                           join bt in _context.Blog_Tags on blog.Id equals bt.Bid
+                           join t in _context.Tags on bt.Tid equals t.Id into Tags
                            select new BlogList
                            {
                                Id = blog.Id,
@@ -34,7 +35,8 @@ namespace Blog.API.Handlers.BlogHandler
                                Creatdate = blog.Creatdate,
                                Modifydate = blog.Modifydate,
                                Uid = blog.Uid,
-                               Tagids = Tags.Any() ? Tags.Select(p => p.Tid).ToList() : new List<int>()
+                               Tagids = Tags.Any() ? Tags.Select(p => p.Id).ToList() : new List<int>(),
+                               TagNames = Tags.Any() ? Tags.Select(p => p.T_Name).ToList() : new List<string>()
                            };
                 // 分页
                 if (request.page > 0 && request.pageSize > 0)
