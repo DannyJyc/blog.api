@@ -1,9 +1,4 @@
-﻿using Azure.Core;
-using Blog.API.Entity;
-using Blog.API.Entity.Models;
-using Blog.API.HandlerEntities.Users;
-using Blog.API.Helper;
-using MediatR;
+﻿using Blog.API.Helper;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;

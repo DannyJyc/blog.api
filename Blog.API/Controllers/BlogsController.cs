@@ -1,8 +1,7 @@
 ﻿using Blog.API.Entity;
-using Blog.API.Entity.Models;
 using Blog.API.HandlerEntities.Blogs;
+using Blog.API.JwtBearer;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.API.Controllers
@@ -36,6 +35,20 @@ namespace Blog.API.Controllers
         public Task<BaseResult> GetDetails(int id)
         {
             var result = _mediator.Send(new BlogSingle() { Id = id });
+            return result;
+        }
+        /// <summary>
+        /// 添加一条博客
+        /// </summary>
+        /// <param name="blog"></param>
+        /// <returns></returns>
+        [HttpPost("insert")]
+        [Authorize]
+        public Task<BaseResult> Insert(BlogInsert blog)
+        {
+            var userid = int.Parse(HttpContext.Items["userid"] == null ? "0" : HttpContext.Items["userid"].ToString());
+            blog.Uid = userid;
+            var result = _mediator.Send(blog);
             return result;
         }
     }

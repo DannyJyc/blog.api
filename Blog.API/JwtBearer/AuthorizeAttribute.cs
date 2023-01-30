@@ -1,10 +1,6 @@
-﻿using Blog.API.Entity.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
-using Blog.API.HandlerEntities.Users;
-using Blog.API.Entity;
-using MediatR;
 
 namespace Blog.API.JwtBearer
 {

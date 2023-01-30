@@ -1,6 +1,4 @@
-﻿using Blog.API.Entity.Models;
-using Blog.API.Entity;
-using Blog.API.HandlerEntities.Users;
+﻿using Blog.API.Entity;
 using MediatR;
 using Blog.API.HandlerEntities.Blogs;
 

@@ -1,8 +1,5 @@
 ﻿using Blog.API.Entity;
-using Blog.API.Entity.Models;
 using Blog.API.HandlerEntities.Blogs;
-using Blog.API.HandlerEntities.Users;
-using Blog.API.JwtBearer;
 using MediatR;
 
 namespace Blog.API.Handlers.BlogHandler

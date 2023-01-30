@@ -1,6 +1,4 @@
-﻿using MediatR;
-
-namespace Blog.API.Entity.Models
+﻿namespace Blog.API.Entity.Models
 {
     public class User 
     {
