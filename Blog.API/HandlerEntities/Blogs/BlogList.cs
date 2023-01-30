@@ -15,9 +15,9 @@ namespace Blog.API.HandlerEntities.Blogs
         /// </summary>
         public int pageSize { get; set; }
         /// <summary>
-        /// 标签id
+        /// 标签名称
         /// </summary>
-        public int Tid { get; set; }
+        public string tname { get; set; }
         /// <summary>
         /// 标签名字
         /// </summary>

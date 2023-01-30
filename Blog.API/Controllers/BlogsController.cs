@@ -21,9 +21,9 @@ namespace Blog.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("getAll")]
-        public Task<BaseResult> GetAll(int page, int pageSize,int tid)
+        public Task<BaseResult> GetAll(int page, int pageSize,string tname)
         {
-            var result = _mediator.Send(new BlogList() { page = page, pageSize = pageSize,Tid = tid });
+            var result = _mediator.Send(new BlogList() { page = page, pageSize = pageSize, tname = tname });
             return result;
         }
         /// <summary>

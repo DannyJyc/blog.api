@@ -21,7 +21,7 @@ namespace Blog.API.Handlers.BlogHandler
                 var list = from blog in _context.Blogs
                            join bt in _context.Blog_Tags on blog.Id equals bt.Bid
                            join t in _context.Tags on bt.Tid equals t.Id into Tags
-                           where request.Tid > 0 ? bt.Tid == request.Tid : bt.Tid != 0
+                           where !string.IsNullOrEmpty(request.tname) ? Tags.Select(p => p.T_Name).Contains(request.tname) : bt.Tid != 0
                            select new BlogList
                            {
                                Id = blog.Id,

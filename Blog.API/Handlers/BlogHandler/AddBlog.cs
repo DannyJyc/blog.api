@@ -19,9 +19,39 @@ namespace Blog.API.Handlers.BlogHandler
             baseResult.message = "添加成功";
             try
             {
-                BlogModel b = request;
+                BlogModel b = new BlogModel
+                {
+                    B_Title = request.B_Title,
+                    B_Images = request.B_Images,
+                    B_Content = request.B_Content,
+                    B_Comment = request.B_Comment,
+                    B_Watched = request.B_Watched,
+                    B_Replied = request.B_Replied,
+                    Creatdate = DateTime.Now,
+                    Modifydate = DateTime.Now,
+                    Uid = request.Uid
+                };
                 _context.Blogs.Add(b);
                 _context.SaveChanges();
+                foreach (var item in request.TagNames)
+                {
+                    // 添加标签
+                    Tag tag = new Tag
+                    {
+                        T_Name = item.ToLower(),
+                        Creatdate = DateTime.Now
+                    };
+                    _context.Tags.Add(tag);
+                    _context.SaveChanges();
+                    // 添加绑定关系
+                    Blog_Tag blog_tag = new Blog_Tag
+                    {
+                        Bid = b.Id,
+                        Tid = tag.Id
+                    };
+                    _context.Blog_Tags.Add(blog_tag);
+                    _context.SaveChanges();
+                }
             }
             catch (Exception ex)
             {
