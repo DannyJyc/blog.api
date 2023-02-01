@@ -21,9 +21,23 @@ namespace Blog.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("getAll")]
-        public Task<BaseResult> GetAll(int page, int pageSize,string tname)
+        public Task<BaseResult> GetAll(int page, int pageSize, string tname)
         {
             var result = _mediator.Send(new BlogList() { page = page, pageSize = pageSize, tname = tname });
+            return result;
+        }
+        /// <summary>
+        /// 获取我自己发布的博客
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [HttpGet("getMyAll")]
+        [Authorize]
+        public Task<BaseResult> GetMyAll(int page, int pageSize)
+        {
+            var userid = int.Parse(HttpContext.Items["userid"] == null ? "0" : HttpContext.Items["userid"].ToString());
+            var result = _mediator.Send(new BlogList() { page = page, pageSize = pageSize, Uid = userid });
             return result;
         }
         /// <summary>
@@ -48,6 +62,18 @@ namespace Blog.API.Controllers
         {
             var userid = int.Parse(HttpContext.Items["userid"] == null ? "0" : HttpContext.Items["userid"].ToString());
             blog.Uid = userid;
+            var result = _mediator.Send(blog);
+            return result;
+        }
+        /// <summary>
+        /// 修改一条博客
+        /// </summary>
+        /// <param name="blog"></param>
+        /// <returns></returns>
+        [HttpPut("update")]
+        //[Authorize]
+        public Task<BaseResult> Update(BlogModify blog)
+        {
             var result = _mediator.Send(blog);
             return result;
         }

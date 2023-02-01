@@ -39,6 +39,9 @@ namespace Blog.API.Entity.Fluents
            .Property(b => b.Modifydate)
            .HasColumnType("datetime")
            .HasComment("最后一次修改时间");
+            modelBuilder
+            .Property(b => b.State)
+            .HasComment("状态");
             modelBuilder.Ignore(b => b.Tagids);
         }
     }

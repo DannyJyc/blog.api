@@ -1,38 +1,39 @@
-﻿using Blog.API.Entity.Models;
-using Blog.API.Entity;
+﻿using Blog.API.Entity;
+using Blog.API.Entity.Models;
+using Blog.API.Entity.StatusControlExpand;
 using Blog.API.HandlerEntities.Blogs;
 using MediatR;
 
 namespace Blog.API.Handlers.BlogHandler
 {
-    public class AddBlog : IRequestHandler<BlogInsert, BaseResult>
+    public class UpdateBlog : IRequestHandler<BlogModify, BaseResult>
     {
         private readonly EFCoreContext _context;
-        public AddBlog(EFCoreContext context)
+        public UpdateBlog(EFCoreContext context)
         {
             _context = context;
         }
-        public Task<BaseResult> Handle(BlogInsert request, CancellationToken cancellationToken)
+
+        public Task<BaseResult> Handle(BlogModify request, CancellationToken cancellationToken)
         {
             BaseResult baseResult = new();
             baseResult.code = 200;
-            baseResult.message = "添加成功";
+            baseResult.message = "修改成功";
             try
             {
-                BlogModel b = new BlogModel
+                var b = _context.Blogs.First(p => p.Id == request.Id);
+                _context.Modify(b, new
                 {
                     B_Title = request.B_Title,
                     B_Images = request.B_Images,
                     B_Content = request.B_Content,
                     B_Comment = request.B_Comment,
-                    B_Watched = request.B_Watched,
-                    B_Replied = request.B_Replied,
-                    Creatdate = DateTime.Now,
                     Modifydate = DateTime.Now,
-                    Uid = request.Uid,
-                    State = 1
-                };
-                _context.Blogs.Add(b);
+                    State = request.State
+                });
+                _context.Blog_Tags.RemoveRange(from bt in _context.Blog_Tags
+                                               where bt.Bid == request.Id
+                                               select bt);
                 _context.SaveChanges();
                 foreach (var item in request.TagNames)
                 {

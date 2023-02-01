@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Blog.API.HandlerEntities.Blogs
 {
-    public class BlogModify : BlogModel, IRequest<BaseResult>
+    public class BlogInsert : BlogModel, IRequest<BaseResult>
     {
         /// <summary>
         /// 标签名字
