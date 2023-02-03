@@ -8,6 +8,17 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+string CorsUrls = AppsettingHelper.Configuration.GetSection("CorsUrls").Value;
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("cors", policy =>
+    {
+        policy.AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials()
+              .WithOrigins(CorsUrls.Split(","));
+    });
+});
 // Add services to the container.
 // 调用扩展方法
 builder.Services.AddControllers();
@@ -62,7 +73,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddSingleton(new JwtProvider());
 
 var app = builder.Build();
-
+app.UseCors("cors");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

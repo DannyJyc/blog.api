@@ -21,7 +21,7 @@ namespace Blog.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("getAll")]
-        public Task<BaseResult> GetAll(int page, int pageSize, string tname)
+        public Task<BaseResult> GetAll(int page, int pageSize, string tname="")
         {
             var result = _mediator.Send(new BlogList() { page = page, pageSize = pageSize, tname = tname });
             return result;
@@ -71,7 +71,7 @@ namespace Blog.API.Controllers
         /// <param name="blog"></param>
         /// <returns></returns>
         [HttpPut("update")]
-        //[Authorize]
+        [Authorize]
         public Task<BaseResult> Update(BlogModify blog)
         {
             var result = _mediator.Send(blog);

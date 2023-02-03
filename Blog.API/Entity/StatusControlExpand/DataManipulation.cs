@@ -18,7 +18,6 @@ namespace Blog.API.Entity.StatusControlExpand
         public static void Modify<T>(this EFCoreContext context, T model, object modifyParams)
             where T : class
         {           
-            // 循环 被修改的属性名 数组
             Type mps = modifyParams.GetType();
             PropertyInfo[] mpPropertys = mps.GetProperties();
             foreach (PropertyInfo item in mpPropertys)
